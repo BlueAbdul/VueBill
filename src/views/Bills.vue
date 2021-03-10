@@ -1,0 +1,264 @@
+<template>
+  <div>
+    <b-row class="mt-5">
+      <b-col cols="3" class="left"> </b-col>
+      <b-col cols="8">
+        <b-card class="shadow-lg p-3">
+          <b-row>
+            <b-col cols="8">
+              <h1><i class="fas fa-chevron-down" /> Factures</h1>
+            </b-col>
+            <b-col cols="2" class="mt-3">
+              <i class="fas fa-plus" /> <a>Nouveau client </a>
+            </b-col>
+            <b-col cols="2" class="mt-3">
+              <i class="fas fa-plus" /> <a>Nouvelle facture </a>
+            </b-col>
+          </b-row>
+          <hr />
+          <br />
+          <b-row>
+            <b-table hover :items="bills" :fields="fields"  :per-page="perPage"
+      :current-page="currentPage" class="grey-th">
+              <template #cell(id)="row">
+                <p>Facture n° {{ row.item.id }}</p>
+              </template>
+              <template #cell(client)="row">
+                <p>
+                  {{ row.item.client.firstname }} {{ row.item.client.lastname }}
+                </p>
+              </template>
+              <template #cell(montant)="row">
+                <p>{{ montantHT(row.item.prestations) }} € HT</p>
+              </template>
+              <template #cell(montant-ttc)="row">
+                <p>
+                  {{ montantTTC(row.item) }} € TTC
+                </p>
+              </template>
+              <template #cell(action)="row">
+                <router-link
+                  :to="{
+                    name: 'edition-facture',
+                    params: { bill: row, id: row.item.id },
+                  }"
+                  class="links"
+                >
+                  <b>Modifier</b></router-link
+                >
+              </template>
+            </b-table>
+          </b-row>
+
+          <b-row>
+              <b-col cols="12" >
+
+            <b-pagination
+            align="center"
+              v-model="currentPage"
+              :total-rows="rows"
+              :per-page="perPage"
+              aria-controls="my-table"
+            ></b-pagination>
+              </b-col>
+          </b-row>
+        </b-card>
+      </b-col>
+      <b-col></b-col>
+    </b-row>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Factures",
+  data() {
+    return {
+      perPage: 2,
+      currentPage: 1,
+      fields: [
+        {
+          key: "id",
+          label: "N° facture",
+          class: "cell-th",
+          sortable: true,
+        },
+        {
+          key: "client",
+          label: "Client",
+          class: "cell-th",
+          sortable: false,
+        },
+        {
+          key: "montant",
+          label: "Montant HT",
+          class: "cell-th",
+          sortable: false,
+        },
+        {
+          key: "montant-ttc",
+          label: "Montant TTC",
+          class: "cell-th",
+          sortable: false,
+        },
+        {
+          key: "action",
+          label: "Action",
+          class: "cell-th",
+          sortable: false,
+        },
+      ],
+      bills: [
+        {
+          id: 135,
+          date: "",
+          description: "",
+          client: {
+            idclient: 2,
+            firstname: "Maria",
+            lastname: "Doe",
+          },
+          prestations: [
+            {
+              description: "Test description",
+              qty: 1,
+              price: 450.0,
+            },
+            {
+              description: "TOTO",
+              qty: 1,
+              price: 950.0,
+            },
+          ],
+          discount: 0.0,
+          paid: 450.0,
+          tva: true,
+          tvaRate: 20,
+        },
+        {
+          id: 220,
+          date: "",
+          description: "",
+          client: {
+            idclient: 2,
+            firstname: "Alphonse",
+            lastname: "LaMenace",
+          },
+          prestations: [
+            {
+              description: "Cours de boxe",
+              qty: 1,
+              price: 50.0,
+            },
+            {
+              description: "Visite chez le dentiste",
+              qty: 1,
+              price: 950.0,
+            },
+          ],
+          discount: 0.0,
+          paid: 0.0,
+          tva: false,
+          tvaRate: 20,
+        },
+        {
+          id: 320,
+          date: "",
+          description: "",
+          client: {
+            idclient: 3,
+            firstname: "Dimitri",
+            lastname: "Nurmagomedov",
+          },
+          prestations: [
+            {
+              description: "Cours de danse",
+              qty: 1,
+              price: 50.0,
+            },
+            {
+              description: "Cours de danse avancée",
+              qty: 2,
+              price: 950.0,
+            },
+          ],
+          discount: 0.0,
+          paid: 950.0,
+          tva: true,
+          tvaRate: 20,
+        },
+        {
+          id: 750,
+          date: "",
+          description: "",
+          client: {
+            idclient: 4,
+            firstname: "Alain",
+            lastname: "Lancien",
+          },
+          prestations: [
+            {
+              description: "Dentier",
+              qty: 4,
+              price: 250.0,
+            },
+            {
+              description: "Pantoufles",
+              qty: 2,
+              price: 10.0,
+            },
+          ],
+          discount: 260.0,
+          paid: 0.0,
+          tva: true,
+          tvaRate: 20,
+        },
+      ],
+    };
+  },
+  computed: {
+    rows() {
+      return this.bills.length;
+    },
+  },
+  methods: {
+    montantHT(elt) {
+      let result = 0;
+      elt.forEach((el) => {
+        result += el.price * el.qty;
+      });
+      return result;
+    },
+
+    montantTTC(elt) {
+      let ht = this.montantHT(elt.prestations);
+      let reductions = elt.discount + elt.paid;
+      let tva = elt.tvaRate;
+      let resultTVA = 0;
+      let result = 0;
+      if( elt.tva){
+          tva = tva / 100;
+           resultTVA = ht * tva;
+           result = ht + resultTVA - reductions;
+      }
+      return result;
+    },
+  },
+};
+</script>
+
+<style>
+.grey-th th {
+  color: lightgrey;
+}
+
+.links {
+  color: rgb(29, 28, 68);
+}
+
+.links:hover {
+  color: rgb(49, 148, 102);
+  transition-duration: 500ms;
+  text-decoration: none;
+}
+</style>
