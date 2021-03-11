@@ -44,7 +44,7 @@
                 <router-link
                   :to="{
                     name: 'edition-facture',
-                    params: { bill: row, id: row.item.id },
+                    params: {  id: row.item.id },
                   }"
                   class="links"
                 >

@@ -157,12 +157,13 @@ export default {
       dataStore(){
         return this.$store.state.dataStore
       },
-      
+      //Map state pour prendre directement la donnée du store
       // ...mapState({
       //   bills: state => state.bill.bills
       // }),
+      //Map getter pour aller chercher une ou des données computed par les getters
       ...mapGetters({
-        bills : 'getTwoLatestBill'
+        bills : 'bill/getTwoLatestBills'
       })
     },
     methods: {
