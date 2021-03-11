@@ -1,0 +1,11 @@
+{
+  "billNumber": 12,
+  "date": "2021-03-11T15:35:11.103Z",
+  "description": "Description",
+  "client": { "idclient": 2, "firstname": "Maria", "lastname": "Doe" },
+  "prestations": [{ "description": "MONGO", "qty": 1, "price": 450 },{ "description": "MONGODB", "qty": 1, "price": 250 }],
+  "discount": 0,
+  "paid": 450,
+  "tva": true,
+  "tvaRate": 20
+}
