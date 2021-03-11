@@ -1,7 +1,8 @@
 {
   "name": "facturation-app",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
+  "description": "App facturation vueJS abdel",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,6 +10,8 @@
     "api": "nodemon server.js",
     "start": "npm-run-all --parallel api serve"
   },
+  "author": "Abdelhakim",
+  "license": "ISC",
   "dependencies": {
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
