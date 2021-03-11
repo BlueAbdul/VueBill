@@ -90,7 +90,7 @@
         <pre
           v-if="debug"
           class="debug card border-primary bg-dark text-light p-4"
-          >{{ bills }}</pre
+          >{{TwoLatest}} </pre
         >
       </b-col>
       <b-col> </b-col>
@@ -101,8 +101,8 @@
 </template>
 
 <script>
-
-import {mapState} from 'vuex'
+//importer mapState si il faut utiliser mapState
+import { mapGetters} from 'vuex'
 
 export default {
     name : 'Dashboard',
@@ -157,8 +157,12 @@ export default {
       dataStore(){
         return this.$store.state.dataStore
       },
-      ...mapState({
-        bills: state => state.bill.bills
+      
+      // ...mapState({
+      //   bills: state => state.bill.bills
+      // }),
+      ...mapGetters({
+        bills : 'getTwoLatestBill'
       })
     },
     methods: {

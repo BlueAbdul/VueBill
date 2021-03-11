@@ -119,7 +119,9 @@ const actions = {
 }
 
 const getters = {
-
+    getTwoLatestBill : (state) => {
+        return state.bills.slice(0,2)
+    }
 }
 
 export  {namespace,state,mutations,actions,getters}
