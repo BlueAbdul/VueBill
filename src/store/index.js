@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import * as bill from './modules/bill'
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-    modules:{},
+    modules:{
+        bill
+    },
     state:{
-        counter: 1
+        counter: 1,
+        dataStore : 'Je viens du store'
+       
     },
     mutations:{
         ON_UPDATE_COUNTER(state, payload){
@@ -21,7 +27,15 @@ const store = new Vuex.Store({
             //La mutation se déclenche
             let newCounter = state.counter + 1
             commit('ON_UPDATE_COUNTER', newCounter)
+        },
+        changeCounter({state, commit}, payload){
+            //L'action fait un appel pour mettre à jour la donnée
+            //Lorsque la donnée est fetch
+            //La mutation se déclenche
+            let newCounter = parseInt(state.counter) + parseInt(payload)
+            commit('ON_UPDATE_COUNTER', newCounter)
         }
+
     },
     getters:{}
 })

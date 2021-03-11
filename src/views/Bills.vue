@@ -18,8 +18,14 @@
           <hr />
           <br />
           <b-row>
-            <b-table hover :items="bills" :fields="fields"  :per-page="perPage"
-      :current-page="currentPage" class="grey-th">
+            <b-table
+              hover
+              :items="bills"
+              :fields="fields"
+              :per-page="perPage"
+              :current-page="currentPage"
+              class="grey-th"
+            >
               <template #cell(id)="row">
                 <p>Facture n° {{ row.item.id }}</p>
               </template>
@@ -32,9 +38,7 @@
                 <p>{{ montantHT(row.item.prestations) }} € HT</p>
               </template>
               <template #cell(montant-ttc)="row">
-                <p>
-                  {{ montantTTC(row.item) }} € TTC
-                </p>
+                <p>{{ montantTTC(row.item) }} € TTC</p>
               </template>
               <template #cell(action)="row">
                 <router-link
@@ -51,29 +55,41 @@
           </b-row>
 
           <b-row>
-              <b-col cols="12" >
-
-            <b-pagination
-            align="center"
-              v-model="currentPage"
-              :total-rows="rows"
-              :per-page="perPage"
-              aria-controls="my-table"
-            ></b-pagination>
-              </b-col>
+            <b-col cols="12">
+              <b-pagination
+                align="center"
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+                aria-controls="my-table"
+              ></b-pagination>
+            </b-col>
           </b-row>
         </b-card>
+        <b-form-checkbox class="my-4" v-model="debug" name="debug" switch
+          >Debug</b-form-checkbox
+        >
+
+        <pre
+          v-if="debug"
+          class="debug card border-primary bg-dark text-light p-4"
+          >{{ bills }}</pre
+        >
       </b-col>
-      <b-col></b-col>
+      <b-col> </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
+
+import {mapState} from 'vuex'
+
 export default {
   name: "Factures",
   data() {
     return {
+      debug:false,
       perPage: 2,
       currentPage: 1,
       fields: [
@@ -108,118 +124,18 @@ export default {
           sortable: false,
         },
       ],
-      bills: [
-        {
-          id: 135,
-          date: "",
-          description: "",
-          client: {
-            idclient: 2,
-            firstname: "Maria",
-            lastname: "Doe",
-          },
-          prestations: [
-            {
-              description: "Test description",
-              qty: 1,
-              price: 450.0,
-            },
-            {
-              description: "TOTO",
-              qty: 1,
-              price: 950.0,
-            },
-          ],
-          discount: 0.0,
-          paid: 450.0,
-          tva: true,
-          tvaRate: 20,
-        },
-        {
-          id: 220,
-          date: "",
-          description: "",
-          client: {
-            idclient: 2,
-            firstname: "Alphonse",
-            lastname: "LaMenace",
-          },
-          prestations: [
-            {
-              description: "Cours de boxe",
-              qty: 1,
-              price: 50.0,
-            },
-            {
-              description: "Visite chez le dentiste",
-              qty: 1,
-              price: 950.0,
-            },
-          ],
-          discount: 0.0,
-          paid: 0.0,
-          tva: false,
-          tvaRate: 20,
-        },
-        {
-          id: 320,
-          date: "",
-          description: "",
-          client: {
-            idclient: 3,
-            firstname: "Dimitri",
-            lastname: "Nurmagomedov",
-          },
-          prestations: [
-            {
-              description: "Cours de danse",
-              qty: 1,
-              price: 50.0,
-            },
-            {
-              description: "Cours de danse avancée",
-              qty: 2,
-              price: 950.0,
-            },
-          ],
-          discount: 0.0,
-          paid: 950.0,
-          tva: true,
-          tvaRate: 20,
-        },
-        {
-          id: 750,
-          date: "",
-          description: "",
-          client: {
-            idclient: 4,
-            firstname: "Alain",
-            lastname: "Lancien",
-          },
-          prestations: [
-            {
-              description: "Dentier",
-              qty: 4,
-              price: 250.0,
-            },
-            {
-              description: "Pantoufles",
-              qty: 2,
-              price: 10.0,
-            },
-          ],
-          discount: 260.0,
-          paid: 0.0,
-          tva: true,
-          tvaRate: 20,
-        },
-      ],
+
     };
   },
   computed: {
     rows() {
       return this.bills.length;
     },
+
+    ...mapState({
+        bills: state => state.bill.bills
+      })
+    
   },
   methods: {
     montantHT(elt) {
