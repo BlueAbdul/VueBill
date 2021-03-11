@@ -23,7 +23,7 @@
         <b-card class="shadow-lg p-3">
           <b-row>
             <b-col cols="8">
-              <h1><i class="fas fa-chevron-down" /> Factures</h1>
+              <h1><i class="fas fa-chevron-down" /> Deux dernières factures</h1>
             </b-col>
             <b-col cols="2" class="mt-3">
               <i class="fas fa-plus" /> <a>Nouveau client </a>
@@ -110,7 +110,7 @@ export default {
       return {
         debug:false,
         counter : 0,
-        perPage: 2,
+        perPage: 1,
       currentPage: 1,
          fields: [
         {
@@ -149,7 +149,7 @@ export default {
 
     computed:{
       rows() {
-      return this.bills.length;
+      return 2;
     },
       counterStore(){
         return this.$store.state.counter
